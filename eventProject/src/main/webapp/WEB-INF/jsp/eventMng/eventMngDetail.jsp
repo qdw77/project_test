@@ -1,26 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="/css/egovframework/main.css"/>
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+	crossorigin="anonymous"></script>
 <title>Insert title here</title>
-<link rel="stylesheet" href="/css/egovframework/main.css">
-<link rel="stylesheet" href="/css/fontawesome/css/all.min.css">
-<script src="/js/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
 
 
 	$(document).ready(function(){
 		fn_getFileList();
 		$("#btn_list").on("click", function(){
-			location.href = "/event/eventList.do";
+			location.href = "/admin/eventMngList.do";
 		});
-				
-		$("#btn_apply").on("click", function(){
-			fn_apply();
+		
+		$("#btn_delete").on("click", function(){
+			fn_delete();
+		});
+		
+		$("#btn_update").on("click", function(){
+			fn_update();
+		});
+		
+		$("#btn_applyList").on("click", function(){
+			fn_applyList();
 		});
 	});
 	
@@ -58,29 +66,50 @@
 		frm.submit();
 	}
 	
-	function fn_apply(){
+	function fn_update(){
+		$("#statusFlag").val("U");
 		var frm = $("#eventFrm");
-		frm.attr("action", "/event/getApply.do");
+		frm.attr("action", "/admin/eventRegist.do");
+		frm.submit();
+	}
+	
+	function fn_delete(){
+		if(confirm("삭제하시겠습니까?")){
+			var frm = $("#eventFrm").serialize();
+			
+			$.ajax({
+			    url: '/admin/deleteEventInfo.do',
+			    method: 'post',
+			    data : frm,
+			    dataType : 'json',
+			    success: function (data, status, xhr) {
+			    	if(data.resultChk > 0){
+			    		alert("삭제되었습니다.");
+			    		location.href = "/admin/eventMngList.do";
+			    	}else{
+			    		alert("삭제에 실패하였습니다.");
+			    		return;
+			    	}
+			    },
+			    error: function (data, status, err) {
+			    	console.log(status);
+			    }
+			});
+		}
+	}
+	
+	function fn_applyList(){
+		console.log(1);
+		var frm = $("#eventFrm");
+		frm.attr("action", "/admin/getApplyList.do");
+		frm.attr("method", "POST");
 		frm.submit();
 	}
 	
 </script>
-<header>
-	<div class="container">
-        <h1>EVENT</h1>
-        <nav>
-            <ul>
-                <li><a href="/event/eventList.do">Home</a></li>
-                <li><a href="javascript:alert('준비중입니다.');">About</a></li>
-                <li><a href="javascript:alert('준비중입니다.');">Services</a></li>
-                <li><a href="javascript:alert('준비중입니다.');">Contact</a></li>
-            </ul>
-        </nav>
-    </div>
-
-</header>
 </head>
 <body>
+	<!-- YYYY-MM-DD 날짜/시/분/초 -->
 	<div class="event-form-container">
         <h2 class="event-form-title">이벤트</h2>
         <form id="fileFrm" name="fileFrm" method="POST">
@@ -140,17 +169,12 @@
                 <input type="text" id="updateDate" name="updateDate" value="${eventInfo.updateDate}" />
             </div>
             <div class="rightBtn">
-            	<c:if test="${eventInfo.applyState == 'P'}">
-            		<button type="button" id="btn_apply" name="btn_apply" style="margin-right: 2px;">접수</button>
-            	</c:if>
+            	<button type="button" id="btn_update" name="btn_update" style="margin-right: 2px;">수정</button>
+            	<button type="button" id="btn_delete" name="btn_delete" style="margin-right: 2px;">삭제</button>
+            	<button type="button" id="btn_applyList" name="btn_applyList" style="margin-right: 2px;">참가자 목록보기</button>
             	<button type="button" id="btn_list" name="btn_list">목록으로</button>
             </div>
         </form>
     </div>
-    <footer>
-		대전배재대ICT융합새일센터 | (34015) 대전광역시 유성구 테크노 1로 11-3(관평동 1337) 배재대학교 대덕밸리캠퍼스 C203호<br>
-			대표. 김정현 | TEL. 042-520-5087 | FAX. 070-8240-7766 | Email. ictsaeil@pcu.ac.kr Copyright ⓒ <br>
-			대전배재대ICT융합새일센터. All Rights reserved.
-	</footer>
 </body>
 </html>

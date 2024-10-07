@@ -1,13 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="/css/egovframework/login.css"/>
-<title>login</title>
-
+<link rel="stylesheet" href="/css/egovframework/main.css"/>
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+	crossorigin="anonymous"></script>
+<title>관리자 로그인</title>
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#btn_login").on('click', function(){
@@ -15,6 +17,7 @@
 		});
 	});
 	
+	// 로그인 join
 	function fn_createAccount(){
 		var frm = $("#frm");
 		frm.attr("method", "POST");
@@ -25,13 +28,13 @@
 	function fn_login() {
 		var frm = $("#frm").serialize();
 		$.ajax({
-		    url: '/Adminlogin.do',
+		    url: '/admin/loginAction.do',
 		    method: 'post',
 		    data : frm,
 		    dataType : 'json',
 		    success: function (data, status, xhr) {
 		        if(data.resultChk){
-		        	location.href="/event/eventboardList.do";
+		        	location.href="/event/eventList.do";
 		        }else{
 		        	alert("로그인에 실패하였습니다.");
 		        	return;
@@ -42,36 +45,31 @@
 		    }
 		});
 	}
-
-
+	
+	
+	
 </script>
 </head>
+
 <body>
-<form id="frm" name="frm">
-	<table>
-	    <tr>
-	        <td><h2>로그인</h2></td>
-	    </tr>
-	    <tr>
-	        <td><input type="text" placeholder="ID" id="id" name="id"></td>
-	    </tr>
-	    <tr>
-	        <td><input type="password" placeholder=Password id="pwd" name="pwd"></td>
-	    </tr>
-	    <tr>
-	       <td><input type="checkbox"> 로그인 정보 저장</td>
-	    </tr>
-	   <tr>
-	        <td><input type="button" value="Sign in" class="btn" id="btn_login" name="btn_login"></td>
-	    </tr>
-	    <tr>
-	        <td class="adminJoin">
-	        	<a href="javascript:fn_findIdView();">아이디찾기</a> 
-	        	<a href="javascript:fn_findPwView();">비밀번호 찾기</a> 
-	        	<a href="javascript:fn_createAccount();">회원가입</a>
-	        </td>
-	    </tr>
-	</table>
-</form>
+	<div class="login-container">
+        <div class="login-box">
+            <h2>로그인</h2>
+            <form method="POST" action="/admin/loginAction.do" id="frm" name="frm">
+                <div class="input-group">
+                    <label for="id">아이디</label>
+                    <input type="text" id="id" name="id" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="pwd" name="pwd" required autocomplete="off">
+                </div>
+                <button type="button" id="btn_login">로그인</button>
+<!--                 <td>
+                <a href="javascript:fn_createAccount();">회원가입</a>
+                </td> -->
+            </form>
+        </div>
+    </div>
 </body>
 </html>

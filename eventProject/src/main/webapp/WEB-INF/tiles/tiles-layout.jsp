@@ -6,16 +6,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Insert title here1</title>
+<tiles:insertAttribute name="header"/>
 </head>
 <body>
 	<div id="wrap" class="container">
-		<tiles:insertAttribute name="header"/>
 		<div class="content">
 			<tiles:insertAttribute name="body"/>
 		</div>
-		<tiles:insertAttribute name="footer"/>
+		
 	</div>
-
+	<tiles:insertAttribute name="footer"/>
 </body>
 </html>

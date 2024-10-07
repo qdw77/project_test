@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="egovframework.sqlmap.mappers.admin.Admin_MySQL">
+<mapper namespace="AdminDAO">
+
+<select id="selectIdChk" parameterType="java.util.HashMap" resultType = "int">
+
+	select COUNT(1)
+	from tb_admin
+	where admin_id = #{accountId}
+
+</select>
+
+<insert id="insertAdmin" parameterType="java.util.HashMap">
+	insert into tb_admin (
+	admin_id,
+	admin_password,
+	admin_name, 
+	create_id, 
+	update_id
+	)
+	values(
+			#{accountId},
+			#{accountPwd},
+			#{accountName},
+			#{accountId},
+			#{accountId}
+	)
+
+
+</insert>
+
+<select id="selectLoginInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+
+	select admin_seq as adminSeq,
+		admin_id as id,
+        admin_name as name,
+        use_yn as useYn
+	from tb_admin
+    where admin_id = #{id}
+    and admin_password = #{pw}
+    and use_yn ='Y'
+
+
+</select>
+
+	<select id="selectAdminInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT admin_seq as adminSeq,
+				admin_id as id,
+				admin_name AS name, 
+				use_yn as useYn
+		FROM tb_admin
+		WHERE admin_seq = #{adminSeq}
+	</select>
+
+<update id="updateAdmin" parameterType="java.util.HashMap">
+	update tb_admin
+	<set>
+		admin_name= #{accountName},
+		update_id = #{accountId},
+		update_date = CURRENT_TIMESTAMP()
+		<if test="accountPwd != null and accountPwd != '' and accountPwd != 'undefined'">
+		,admin_password = #{accountPwd}
+		</if>
+	</set>
+	where admin_seq = #{adminSeq}
+
+</update>
+
+	<select id="selectAdminCertification" parameterType="java.util.HashMap" resultType="int">
+		SELECT admin_seq
+		FROM tb_admin
+		WHERE admin_id = #{adminId}
+		AND admin_name = #{adminName}
+	</select>
+	
+	<select id="selectAdminCertificationChk" parameterType="java.util.HashMap" resultType="int">
+		SELECT count(admin_seq)
+		FROM tb_admin
+		WHERE admin_id = #{adminId}
+		AND admin_name = #{adminName}
+	</select>
 
 
 </mapper>
