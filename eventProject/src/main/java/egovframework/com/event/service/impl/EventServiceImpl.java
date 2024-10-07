@@ -20,4 +20,10 @@ public class EventServiceImpl extends EgovAbstractServiceImpl implements EventSe
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int getEventInfoListCnt(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

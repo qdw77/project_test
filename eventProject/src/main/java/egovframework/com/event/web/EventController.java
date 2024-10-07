@@ -49,6 +49,7 @@ public class EventController {
 		List<HashMap<String, Object>> list = eventService.getEventInfoList(paramMap);
 		int totCnt = eventService.getEventInfoListCnt(paramMap);
 		paginationInfo.setTotalRecordCount(totCnt);
+		return mv;
 	}
 
 
