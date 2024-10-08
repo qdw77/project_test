@@ -2,7 +2,226 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="AdminDAO">
 
-<select id="selectIdChk" parameterType="java.util.HashMap" resultType = "int">
+
+<select id="selectAdminLoginInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  admin_id AS id,
+				admin_name AS name
+		FROM tb_admin
+		WHERE admin_id = #{id}
+		AND admin_password = #{pwd}
+		AND use_yn = 'Y'
+	</select>
+	
+	<insert id="insertEvent" parameterType="java.util.HashMap">
+		INSERT tb_event(
+			event_post_start_date,
+			event_post_end_date,
+			event_start_date,
+			event_end_date,
+			event_title,
+			event_content,
+			event_file_group_seq,
+			create_id,
+			update_id
+		) VALUES(
+			CONCAT(#{postStartDate},' ',#{postStartHour}, ':',#{postStartMinute},':00'),
+			CONCAT(#{postEndDate},' ',#{postEndHour}, ':',#{postEndMinute},':00'),
+			CONCAT(#{eventStartDate},' ',#{eventStartHour}, ':',#{eventStartMinute},':00'),
+			CONCAT(#{eventEndDate},' ',#{eventEndHour}, ':',#{eventEndMinute},':00'),
+			#{eventTitle},
+			#{eventContent},
+			(SELECT ifnull(MAX(event_file_group_seq)+1, 1) FROM tb_event T),
+			#{memberId},
+			#{memberId}
+		)
+	</insert>
+	
+	<update id="updateEvent" parameterType="java.util.HashMap">
+		UPDATE tb_event
+		SET event_post_start_date = CONCAT(#{postStartDate},' ',#{postStartHour}, ':',#{postStartMinute},':00'),
+			event_post_end_date = CONCAT(#{postEndDate},' ',#{postEndHour}, ':',#{postEndMinute},':00'),
+			event_start_date = CONCAT(#{eventStartDate},' ',#{eventStartHour}, ':',#{eventStartMinute},':00'),
+			event_end_date = CONCAT(#{eventEndDate},' ',#{eventEndHour}, ':',#{eventEndMinute},':00'),
+			event_title = #{eventTitle},
+			event_content = #{eventContent},
+			event_file_group_seq = #{fileGroupSeq},
+			update_id = #{memberId}
+		WHERE event_seq = #{eventSeq}
+	</update>
+	
+	<select id="getFileGroupMaxSeq" resultType="int">
+		SELECT ifnull(MAX(event_file_group_seq), 0) FROM tb_event
+	</select>
+	
+	<select id="getFileGroupSeq" parameterType="java.util.HashMap" resultType="int">
+		SELECT event_file_group_seq
+		FROM tb_event
+		WHERE event_seq = #{eventSeq}
+	</select>
+	
+	<insert id="insertFileAttr" parameterType="java.util.HashMap">
+		INSERT INTO tb_file_attr(
+			file_group_seq,
+			original_file_name,
+			save_file_name,
+			file_path,
+			file_size,
+			file_ext,
+			create_id,
+			create_date,
+			update_id,
+			update_date		
+		) VALUES(
+			#{fileGroupSeq},
+			#{originalFileName},
+			#{saveFileName},
+			#{saveFilePath},
+			#{fileSize},
+			#{fileExt},
+			#{memberId},
+			CURRENT_TIMESTAMP(),
+			#{memberId},
+			CURRENT_TIMESTAMP()
+		)
+	</insert>
+	
+	<select id="selectFileList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  file_seq AS fileSeq,
+				file_group_seq AS fileGroupSeq,
+				original_file_name AS fileOriginalName,
+				save_file_name AS saveFileName,
+				file_path AS saveFilePath,
+				file_size AS fileSize,
+				file_ext AS fileExt,
+				create_id AS createId,
+				DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+				update_id AS updateId,
+				DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate	
+		FROM tb_file_attr
+		WHERE file_group_seq = #{fileGroupSeq}
+		AND use_yn = 'Y'
+	</select>
+	
+	<select id="selectAdminEventList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  @rownum:=@rownum+1 AS rnum,
+				eventSeq,
+				eventPostStartDate,
+				eventPostEndDate,
+				eventStartDate,
+				eventEndDate,
+				eventTitle,
+				eventViewCnt,
+				useYn,
+				createId,
+				createDate,
+				updateId,
+				updateDate
+		FROM (SELECT    event_seq AS eventSeq,
+						DATE_FORMAT(event_post_start_date, '%Y-%m-%d %H:%i:%s') AS eventPostStartDate,
+						DATE_FORMAT(event_post_end_date, '%Y-%m-%d %H:%i:%s') AS eventPostEndDate,
+						DATE_FORMAT(event_start_date, '%Y-%m-%d %H:%i:%s') AS eventStartDate,
+						DATE_FORMAT(event_end_date, '%Y-%m-%d %H:%i:%s') AS eventEndDate,
+						event_title AS eventTitle, 
+						event_view_cnt AS eventViewCnt,
+						use_yn AS useYn,
+						create_id AS createId,
+						DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+						update_id AS updateId,
+						DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate 
+			  FROM tb_event
+		 	  WHERE 1=1
+			  <if test="searchKeyword != null and searchKeyword != '' and searchKeyword != 'undefined'">
+				  AND event_title LIKE CONCAT('%', #{searchKeyword}, '%')
+			  </if>) T, (SELECT @rownum:=0 FROM dual) R
+	    ORDER BY CAST(replace(@rownum, ',', '') AS UNSIGNED) desc
+	    LIMIT #{recordCountPerPage} offset #{firstIndex}
+	</select>
+	
+	<select id="selectAdminEventCnt" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(event_seq)
+		FROM tb_event
+ 	    WHERE 1=1
+	    <if test="searchKeyword != null and searchKeyword != '' and searchKeyword != 'undefined'">
+		    AND event_title LIKE CONCAT('%', #{searchKeyword}, '%')
+	    </if>
+	</select>
+	
+	<select id="selectAdminEventInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  event_seq AS eventSeq,
+				DATE_FORMAT(event_post_start_date, '%Y-%m-%d') AS eventPostStartDate,
+				DATE_FORMAT(event_post_start_date, '%H') AS eventPostStartHour,
+				DATE_FORMAT(event_post_start_date, '%i') AS eventPostStartMinute,
+				DATE_FORMAT(event_post_end_date, '%Y-%m-%d') AS eventPostEndDate,
+				DATE_FORMAT(event_post_end_date, '%H') AS eventPostEndHour,
+				DATE_FORMAT(event_post_end_date, '%i') AS eventPostEndMinute,
+				DATE_FORMAT(event_start_date, '%Y-%m-%d') AS eventStartDate,
+				DATE_FORMAT(event_start_date, '%H') AS eventStartHour,
+				DATE_FORMAT(event_start_date, '%i') AS eventStartMinute,
+				DATE_FORMAT(event_end_date, '%Y-%m-%d') AS eventEndDate,
+				DATE_FORMAT(event_end_date, '%H') AS eventEndHour,
+				DATE_FORMAT(event_end_date, '%i') AS eventEndMinute,
+				event_title AS eventTitle, 
+				event_Content AS eventContent, 
+				event_view_cnt AS eventViewCnt,
+				event_file_group_seq AS eventFileGroupSeq,
+				use_yn AS useYn,
+				create_id AS createId,
+				DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+				update_id AS updateId,
+				DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate 
+	  FROM tb_event
+	  WHERE event_seq = #{eventSeq}
+	</select>
+	
+	<update id="deleteFileInfo" parameterType="java.util.HashMap">
+		UPDATE tb_file_attr
+		SET use_yn = 'N',
+			update_date = CURRENT_TIMESTAMP(),
+			update_id = #{memberId}
+		WHERE file_group_seq = #{fileGroupSeq}
+		AND file_seq in (${deleteFiles})
+		
+	</update>
+	
+	<update id="deleteEventInfo" parameterType="java.util.HashMap">
+		UPDATE tb_event
+		SET use_yn = 'N',
+			update_id = #{memberId},
+			update_date = CURRENT_TIMESTAMP()
+		WHERE event_seq = #{eventSeq}
+		
+	</update>
+	
+	<select id="selectEventApplyList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select  T.event_join_seq AS eventJoinSeq,
+				T.event_seq AS eventSeq,
+				(select e.event_title from tb_event e where T.event_seq = e.event_seq) AS eventTitle,
+		        T.event_join_name AS joinName,
+		        T.event_join_phone AS joinPhone,
+		        T.event_join_email AS joinEmail,
+		        T.event_join_sex AS joinSex,
+		        T.event_join_birth AS joinBirth,
+		        T.event_join_addr AS joinAddr,
+		        T.event_join_state AS joinState
+		from tb_event_join T
+		WHERE T.event_seq = #{eventSeq}
+	</select>
+	
+	<update id="setEventJoinCofirm" parameterType="java.util.HashMap">
+		UPDATE tb_event_join
+		SET event_join_state = 'W',
+			update_id = #{memberId},
+			update_date = CURRENT_TIMESTAMP()
+		WHERE event_seq = #{eventSeq}
+		AND event_join_seq in (${chkArray})
+	</update>
+	
+
+
+
+
+
+<!-- <select id="selectIdChk" parameterType="java.util.HashMap" resultType = "java.util.HashMap">
 
 	select COUNT(1)
 	from tb_admin
@@ -29,19 +248,7 @@
 
 </insert>
 
-<select id="selectLoginInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 
-	select admin_seq as adminSeq,
-		admin_id as id,
-        admin_name as name,
-        use_yn as useYn
-	from tb_admin
-    where admin_id = #{id}
-    and admin_password = #{pw}
-    and use_yn ='Y'
-
-
-</select>
 
 	<select id="selectAdminInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		SELECT admin_seq as adminSeq,
@@ -79,6 +286,6 @@
 		WHERE admin_id = #{adminId}
 		AND admin_name = #{adminName}
 	</select>
-
+ -->
 
 </mapper>

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+
+import egovframework.com.admin.service.AdminService;
 import egovframework.com.event.service.EventService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
@@ -21,16 +23,12 @@ public class EventController {
 	@Resource(name="EventService")
 	private EventService eventService;
 	
+	@Resource(name="AdminService")
+	private AdminService adminService;
+	
 	@RequestMapping("/event/eventList.do")
-	public String eventList(HttpSession session, Model model) {
-		HashMap<String, Object> loginInfo = null;
-		loginInfo = (HashMap<String, Object>) session.getAttribute("loginInfo");
-		if(loginInfo != null) {
-			model.addAttribute("loginInfo", loginInfo);
-			return "event/eventList";
-		}else {
-			return "redirect:/login.do";
-		}
+	public String eventList() {
+		return "/event/eventList";
 	}
 	
 	@RequestMapping("/event/getEventInfoList.do")

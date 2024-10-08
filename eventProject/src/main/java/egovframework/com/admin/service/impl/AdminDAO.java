@@ -11,31 +11,62 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("AdminDAO")
 public class AdminDAO extends EgovAbstractMapper{
 
-	public int insertAdmin(HashMap<String, Object> paramMap) {
-		// TODO Auto-generated method stub
-		return insert("insertAdmin", paramMap);
+	public HashMap<String, Object> selectAdminLoginInfo(HashMap<String, Object> paramMap){
+		return selectOne("selectAdminLoginInfo", paramMap);
 	}
 	
-	public int selectIdChk(HashMap<String, Object> paramMap) {
-		return selectOne("selectIdChk", paramMap);
+	public int insertEvent(HashMap<String, Object> paramMap) {
+		return insert("insertEvent", paramMap);
 	}
 	
-	public HashMap<String, Object> selectLoginInfo(HashMap<String, Object> paramMap){
-		return selectOne("selectLoginInfo", paramMap);
+	public int updateEvent(HashMap<String, Object> paramMap) {
+		return update("updateEvent", paramMap);
 	}
 	
-	public int updateAdmin(HashMap<String, Object> paramMap) {
-		return update("updateAdmin", paramMap);
+	public int getFileGroupMaxSeq() {
+		return selectOne("getFileGroupMaxSeq");
+	}
+	
+	public int getFileGroupSeq(HashMap<String, Object> paramMap) {
+		return selectOne("getFileGroupSeq", paramMap);
+	}
+	
+	public int insertFileAttr(HashMap<String, Object> paramMap) {
+		return insert("insertFileAttr", paramMap);
+	}
+	
+	public List<HashMap<String, Object>> selectAdminEventList(HashMap<String, Object> paramMap){
+		return selectList("selectAdminEventList", paramMap);
+	}
+	
+	public int selectAdminEventCnt(HashMap<String, Object> paramMap) {
+		return selectOne("selectAdminEventCnt", paramMap);
+	}
+	
+	public HashMap<String, Object> getAdminEventInfo(HashMap<String, Object> paramMap){
+		return selectOne("selectAdminEventInfo", paramMap);
+	}
+	
+	public List<HashMap<String, Object>> selectFileList(HashMap<String, Object> paramMap){
+		return selectList("selectFileList", paramMap);
+	}
+	
+	public int deleteFileInfo(HashMap<String, Object> paramMap) {
+		return update("deleteFileInfo", paramMap);
+	}
+	
+	public int deleteEventInfo(HashMap<String, Object> paramMap) {
+		return update("deleteEventInfo", paramMap);
+	}
+	
+	public List<HashMap<String, Object>> selectEventApplyList(HashMap<String, Object> paramMap){
+		return selectList("selectEventApplyList", paramMap);
+	}
+	
+	public int setEventJoinCofirm(HashMap<String, Object> paramMap) {
+		return update("setEventJoinCofirm", paramMap);
 	}
 
-	public int selectAdminCertification(HashMap<String, Object> paramMap) {
-		// TODO Auto-generated method stub
-		return selectOne("selectAdminCertification", paramMap);
-	}
-	
-	public int selectAdminCertificationChk(HashMap<String, Object> paramMap) {
-		return selectOne("selectMemberCertificationChk", paramMap);
-	}
 	
 	
 

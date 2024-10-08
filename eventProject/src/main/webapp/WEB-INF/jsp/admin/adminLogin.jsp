@@ -12,39 +12,9 @@
 <title>관리자 로그인</title>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#btn_login").on('click', function(){
-			fn_login();
-		});
+
+		
 	});
-	
-	// 로그인 join
-	function fn_createAccount(){
-		var frm = $("#frm");
-		frm.attr("method", "POST");
-		frm.attr("action", "/join.do");
-		frm.submit();
-	}
-	
-	function fn_login() {
-		var frm = $("#frm").serialize();
-		$.ajax({
-		    url: '/admin/loginAction.do',
-		    method: 'post',
-		    data : frm,
-		    dataType : 'json',
-		    success: function (data, status, xhr) {
-		        if(data.resultChk){
-		        	location.href="/event/eventList.do";
-		        }else{
-		        	alert("로그인에 실패하였습니다.");
-		        	return;
-		        }
-		    },
-		    error: function (data, status, err) {
-		    	console.log(err);
-		    }
-		});
-	}
 	
 	
 	
@@ -64,10 +34,7 @@
                     <label for="password">비밀번호</label>
                     <input type="password" id="pwd" name="pwd" required autocomplete="off">
                 </div>
-                <button type="button" id="btn_login">로그인</button>
-<!--                 <td>
-                <a href="javascript:fn_createAccount();">회원가입</a>
-                </td> -->
+                <button type="submit">로그인</button>
             </form>
         </div>
     </div>
