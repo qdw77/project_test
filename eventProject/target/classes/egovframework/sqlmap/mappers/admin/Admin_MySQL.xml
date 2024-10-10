@@ -88,7 +88,7 @@
 	<select id="selectFileList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		SELECT  file_seq AS fileSeq,
 				file_group_seq AS fileGroupSeq,
-				original_file_name AS fileOriginalName,
+				original_file_name AS originalFileName,
 				save_file_name AS saveFileName,
 				file_path AS saveFilePath,
 				file_size AS fileSize,
@@ -121,7 +121,7 @@
 						DATE_FORMAT(event_post_end_date, '%Y-%m-%d %H:%i:%s') AS eventPostEndDate,
 						DATE_FORMAT(event_start_date, '%Y-%m-%d %H:%i:%s') AS eventStartDate,
 						DATE_FORMAT(event_end_date, '%Y-%m-%d %H:%i:%s') AS eventEndDate,
-						event_title AS eventTitle, 
+						event_title AS eventTitle,
 						event_view_cnt AS eventViewCnt,
 						use_yn AS useYn,
 						create_id AS createId,

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,7 +33,7 @@ public class EventController {
 	}
 	
 	@RequestMapping("/event/getEventInfoList.do")
-	public ModelAndView getEventInfoList(@RequestParam HashMap<String, Object> paramMap) {
+	public ModelAndView getEventInfoList(@RequestParam HashMap<String, Object> paramMap){
 		ModelAndView mv = new ModelAndView();
 		
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -41,14 +42,48 @@ public class EventController {
 		paginationInfo.setPageSize(10);
 		
 		paramMap.put("firstIndex", paginationInfo.getFirstRecordIndex());
-		paramMap.put("lastrIndex", paginationInfo.getLastRecordIndex());
+		paramMap.put("lastIndex", paginationInfo.getLastRecordIndex());
 		paramMap.put("recordCountPerPage", paginationInfo.getRecordCountPerPage());
 		
-		List<HashMap<String, Object>> list = eventService.getEventInfoList(paramMap);
-		int totCnt = eventService.getEventInfoListCnt(paramMap);
+		List<HashMap<String, Object>> list = eventService.selectEventList(paramMap);
+		int totCnt = eventService.selectEventListCnt(paramMap);
+		
 		paginationInfo.setTotalRecordCount(totCnt);
+		
+		
+		mv.addObject("totCnt", totCnt);
+		mv.addObject("list", list);
+		mv.addObject("paginationInfo", paginationInfo);
+		
+		mv.setViewName("jsonView");
 		return mv;
 	}
-
+	
+	@RequestMapping("/event/getApply.do")
+	public String getApply(@RequestParam HashMap<String, Object> paramMap, ModelMap model) {
+		model.addAttribute("eventSeq", paramMap.get("eventSeq"));
+		return "/event/eventApply";
+	}
+	
+	@RequestMapping("/event/getEventInfo.do")
+	public String getEventInfo(@RequestParam HashMap<String, Object> paramMap, ModelMap model) {
+		HashMap<String, Object> eventInfo = eventService.getEventInfo(paramMap);
+		model.addAttribute("eventInfo", eventInfo);
+		return "/event/eventDetail";
+	}
+	
+	@RequestMapping("/event/apply.do")
+	public ModelAndView apply(@RequestParam HashMap<String, Object> paramMap) {
+		ModelAndView mv = new ModelAndView();
+		
+		int resultChk = 0;
+		
+		resultChk = eventService.insertEventApply(paramMap);
+		
+		mv.addObject("resultChk", resultChk);
+		mv.setViewName("jsonView");
+		return mv;
+	}
+	
 
 }

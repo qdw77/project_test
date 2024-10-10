@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="/css/egovframework/main.css"/>
+<link rel="stylesheet" href="/css/egovframework/main.css">
 <link rel="stylesheet" href="/css/fontawesome/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.7.1.js"
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -47,8 +47,8 @@
 		    	var innerHtml = '';
 		    	for(var i=0; i<data.fileList.length; i++){
 		    		innerHtml += '<span>';
-		    		innerHtml += '<a href="javascript:fn_down(\''+data.fileList[i].saveFilePath+'\',\''+data.fileList[i].saveFileName+'\');">';
-			    	innerHtml += data.fileList[i].fileOriginalName;
+		    		innerHtml += '<a href="javascript:fn_down(\''+data.fileList[i].saveFilePath+'\',\''+data.fileList[i].saveFileName+'\', \''+data.fileList[i].originalFileName+'\');">';
+			    	innerHtml += data.fileList[i].originalFileName;
 			    	innerHtml += '</a></span><br>';	
 		    	}
 		    	$("#boardFileList").html(innerHtml);
@@ -59,9 +59,10 @@
 		});
 	}
 	
-	function fn_down(filePath, fileName){
+	function fn_down(filePath, fileName, originalFileName){
 		$("#fileName").val(fileName);
 		$("#filePath").val(filePath)
+		$("#originalFileName").val(originalFileName);
 		var frm = $("#fileFrm");
 		frm.attr("action", "/admin/getFileDown.do");
 		frm.submit();
@@ -116,6 +117,7 @@
         <form id="fileFrm" name="fileFrm" method="POST">
         	<input type="hidden" id="fileName" name="fileName" />
         	<input type="hidden" id="filePath" name="filePath" />
+        	<input type="hidden" id="originalFileName" name="originalFileName" />
         </form>
         <form class="event-form" method="POST" id="eventFrm" name="eventFrm">
         	<input type="hidden" id="eventSeq" name="eventSeq" value="${eventInfo.eventSeq }"/>

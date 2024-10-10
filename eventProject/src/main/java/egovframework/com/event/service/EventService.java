@@ -6,6 +6,11 @@ import java.util.List;
 
 public interface EventService {
 
-	public List<HashMap<String, Object>> getEventInfoList(HashMap<String, Object> paramMap);
-	public int getEventInfoListCnt(HashMap<String, Object> paramMap);
+	List<HashMap<String, Object>> selectEventList(HashMap<String, Object> paramMap);
+	
+	int selectEventListCnt(HashMap<String, Object> paramMap);
+	
+	int insertEventApply(HashMap<String, Object> paramMap);
+	
+	HashMap<String, Object> getEventInfo(HashMap<String, Object> paramMap);
 }

@@ -1,6 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="egovframework.sqlmap.mappers.event.Event_MySQL">
-
+<mapper namespace="EventDAO">
+<!-- <select id="selectEventList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  @rownum:=@rownum+1 AS rnum,
+				eventSeq,
+				eventPostStartDate,
+				eventPostEndDate,
+				eventStartDate,
+				eventEndDate,
+				eventTitle,
+				eventViewCnt,
+				useYn,
+				createId,
+				createDate,
+				updateId,
+				updateDate
+		FROM (SELECT    event_seq AS eventSeq,
+						DATE_FORMAT(event_post_start_date, '%Y-%m-%d %H:%i:%s') AS eventPostStartDate,
+						DATE_FORMAT(event_post_end_date, '%Y-%m-%d %H:%i:%s') AS eventPostEndDate,
+						DATE_FORMAT(event_start_date, '%Y-%m-%d %H:%i:%s') AS eventStartDate,
+						DATE_FORMAT(event_end_date, '%Y-%m-%d %H:%i:%s') AS eventEndDate,
+						event_title AS eventTitle, 
+						event_view_cnt AS eventViewCnt,
+						use_yn AS useYn,
+						create_id AS createId,
+						DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+						update_id AS updateId,
+						DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate 
+			  FROM tb_event
+		 	  WHERE 1=1
+		 	  AND now() between event_post_start_date and event_post_end_date
+		 	  AND use_yn = 'Y'
+			  <if test="searchKeyword != null and searchKeyword != '' and searchKeyword != 'undefined'">
+				  AND event_title LIKE CONCAT('%', #{searchKeyword}, '%')
+			  </if>) T, (SELECT @rownum:=0 FROM dual) R
+	    ORDER BY CAST(replace(@rownum, ',', '') AS UNSIGNED) desc
+	    LIMIT #{recordCountPerPage} offset #{firstIndex}
+	</select> -->
+	
+	<select id="selectEventList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  @rownum:=@rownum+1 AS rnum,
+				eventSeq,
+				eventPostStartDate,
+				eventPostEndDate,
+				eventStartDate,
+				eventEndDate,
+				eventTitle,
+				eventViewCnt,
+				useYn,
+				createId,
+				createDate,
+				updateId,
+				updateDate
+		FROM (SELECT    event_seq AS eventSeq,
+						DATE_FORMAT(event_post_start_date, '%Y-%m-%d %H:%i:%s') AS eventPostStartDate,
+						DATE_FORMAT(event_post_end_date, '%Y-%m-%d %H:%i:%s') AS eventPostEndDate,
+						DATE_FORMAT(event_start_date, '%Y-%m-%d %H:%i:%s') AS eventStartDate,
+						DATE_FORMAT(event_end_date, '%Y-%m-%d %H:%i:%s') AS eventEndDate,
+						event_title AS eventTitle, 
+						event_view_cnt AS eventViewCnt,
+						use_yn AS useYn,
+						create_id AS createId,
+						DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+						update_id AS updateId,
+						DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate 
+			  FROM tb_event
+			  WHERE 1=1
+			  AND DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s')
+			  between DATE_FORMAT(event_post_start_date, '%Y-%m-%d %H:%i:%s') 
+			  and DATE_FORMAT(event_post_end_date, '%Y-%m-%d %H:%i:%s')
+			  AND use_yn = 'Y'
+			  <if test="searchKeyword != null and searchKeyword != '' and searchKeyword != 'undefined'">
+				  AND event_title LIKE CONCAT('%', #{searchKeyword}, '%')
+			  </if>) T, (SELECT @rownum:=0 FROM dual) R
+	    ORDER BY CAST(replace(@rownum, ',', '') AS UNSIGNED) desc
+	    LIMIT #{recordCountPerPage} offset #{firstIndex}
+	</select>
+	
+	<select id="selectEventListCnt" parameterType="java.util.HashMap" resultType="int">
+		  SELECT COUNT(event_seq)
+		  FROM tb_event
+	 	  WHERE 1=1
+	 	  AND now() between event_post_start_date and event_post_end_date
+	 	  AND use_yn = 'Y'
+		  <if test="searchKeyword != null and searchKeyword != '' and searchKeyword != 'undefined'">
+			  AND event_title LIKE CONCAT('%', #{searchKeyword}, '%')
+		  </if>
+	</select>
+	
+	<select id="selectEventApplyChk" parameterType="java.util.HashMap" resultType="int">
+		SELECT count(event_join_seq)
+		FROM tb_event_join
+		WHERE event_join_name = #{joinName}
+		AND event_join_phone = #{joinPhone}
+		AND event_join_state in ('A', 'W')
+	</select>
+	
+	<insert id="insertEventApply" parameterType="java.util.HashMap">
+		INSERT INTO tb_event_join(
+			event_seq,
+			event_join_name,
+			event_join_phone,
+			event_join_email,
+			event_join_sex,
+			event_join_birth,
+			event_join_addr,
+			event_join_state,
+			create_id,
+			create_date,
+			update_id,
+			update_date
+		) VALUES(
+			#{eventSeq},
+			#{joinName},
+            #{joinPhone},
+            #{joinEmail},
+            #{joinSex},
+            #{joinBirth},
+            #{joinAddr},
+            'A',
+            #{joinName},
+            now(),
+            #{joinName},
+            now()
+        )
+	</insert>
+	
+	<select id="selectEventInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  event_seq AS eventSeq,
+				DATE_FORMAT(event_post_start_date, '%Y-%m-%d') AS eventPostStartDate,
+				DATE_FORMAT(event_post_start_date, '%H') AS eventPostStartHour,
+				DATE_FORMAT(event_post_start_date, '%i') AS eventPostStartMinute,
+				DATE_FORMAT(event_post_end_date, '%Y-%m-%d') AS eventPostEndDate,
+				DATE_FORMAT(event_post_end_date, '%H') AS eventPostEndHour,
+				DATE_FORMAT(event_post_end_date, '%i') AS eventPostEndMinute,
+				DATE_FORMAT(event_start_date, '%Y-%m-%d') AS eventStartDate,
+				DATE_FORMAT(event_start_date, '%H') AS eventStartHour,
+				DATE_FORMAT(event_start_date, '%i') AS eventStartMinute,
+				DATE_FORMAT(event_end_date, '%Y-%m-%d') AS eventEndDate,
+				DATE_FORMAT(event_end_date, '%H') AS eventEndHour,
+				DATE_FORMAT(event_end_date, '%i') AS eventEndMinute,
+				event_title AS eventTitle, 
+				event_Content AS eventContent, 
+				event_view_cnt AS eventViewCnt,
+				event_file_group_seq AS eventFileGroupSeq,
+				use_yn AS useYn,
+				create_id AS createId,
+				DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate,
+				update_id AS updateId,
+				DATE_FORMAT(update_date, '%Y-%m-%d %H:%i:%s') AS updateDate,
+				if(now() between event_start_date and event_end_date, 'P', 'I') AS applyState 
+	  FROM tb_event
+	  WHERE event_seq = #{eventSeq}
+	  
+	</select>
 
 </mapper>

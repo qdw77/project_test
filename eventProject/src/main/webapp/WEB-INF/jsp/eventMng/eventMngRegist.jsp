@@ -5,7 +5,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="/css/egovframework/main.css"/>
+<link rel="stylesheet" href="/css/egovframework/main.css">
+<link rel="stylesheet" href="/css/fontawesome/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.7.1.js"
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
@@ -15,8 +16,8 @@
 var fileCnt = 0;
 var totalCnt = 20;
 var fileNum = 0;
-var content_files = new Array();
-var deleteFiles = new Array();
+var content_files = new Array(); /* 실제 업로드 파일 */
+var deleteFiles = new Array(); /* 삭제 업로드 파일 */
 /* 파일 업로드 관련 변수 */
 
 	$(document).ready(function(){
@@ -49,6 +50,7 @@ var deleteFiles = new Array();
 			filesArr.forEach(function (f){
 				var reader = new FileReader();
 				reader.onload = function (e){
+					content_files.push(f);
 					$("#boardFileList").append(
 								'<div id="file'+fileNum+'" style="float:left; width:100%; padding-left:100px;">'
 								+'<font style="font-size:12px">' + f.name + '</font>'
@@ -67,7 +69,7 @@ var deleteFiles = new Array();
 	function fileDelete(fileNum){
 		var no = fileNum.replace(/[^0-9]/g, "");
 		content_files[no].is_delete = true;
-		$("#"+fileNum).remove();f
+		$("#"+fileNum).remove();
 		fileCnt--;
 	}
 	
