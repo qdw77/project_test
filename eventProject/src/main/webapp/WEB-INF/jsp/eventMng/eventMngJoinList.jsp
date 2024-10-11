@@ -11,6 +11,7 @@
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
 <title>Insert title here</title>
+<!-- admin 당첨 결정 -->
 <script type="text/javascript">
 	$(document).ready(function(){
 		fn_selectList();
@@ -26,6 +27,10 @@
 		$("#excelDown").on("click", function(){
 			fn_excelDown();
 		});
+		
+		$("#btn_list").on("click", function(){
+			location.href = "/event/eventList.do";
+		})
 		
 	});
 	
@@ -116,6 +121,12 @@
 		    	console.log(data);
 		    }
 		});
+		
+	}
+	
+	function fn_chkDelete() {
+		
+		
 		
 	}
 	

@@ -28,6 +28,8 @@ public interface AdminService {
 	
 	int setEventJoinCofirm(HashMap<String, Object> paramMap);
 
+	/* int reRegisterEvent(HashMap<String, Object> paramMap); */
+
 	
 	
 

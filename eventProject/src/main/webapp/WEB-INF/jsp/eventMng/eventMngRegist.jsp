@@ -11,6 +11,7 @@
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
 <title>Insert title here</title>
+<!-- admin 등록 -->
 <script type="text/javascript">
 /* 파일 업로드 관련 변수 */
 var fileCnt = 0;

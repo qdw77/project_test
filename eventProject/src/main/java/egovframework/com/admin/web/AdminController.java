@@ -254,6 +254,18 @@ public class AdminController {
 		return mv;
 	}
 	
+	/*
+	 * @RequestMapping("/admin/reRegisterEvent.do") public String
+	 * reRegisterEvent(@RequestParam("eventSeq") String
+	 * eventSeq, @RequestParam("memberId") String memberId) { HashMap<String,
+	 * Object> paramMap = new HashMap<>(); paramMap.put("eventSeq", eventSeq);
+	 * paramMap.put("memberId", memberId);
+	 * 
+	 * int result = adminService.reRegisterEvent(paramMap); if (result > 0) { return
+	 * "redirect:/admin/eventMngList.do"; // 성공 시 목록으로 리디렉션 } else { // 실패 시 적절한 에러
+	 * 처리 return "redirect:/admin/errorPage.do"; // 에러 페이지로 리디렉션 } }
+	 */
+	
 	@RequestMapping("/admin/getApplyList.do")
 	public String getApplyList(@RequestParam HashMap<String, Object> paramMap, ModelMap model, HttpSession session) {
 		HashMap<String, Object> loginInfo = null;

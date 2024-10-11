@@ -112,7 +112,7 @@ public class AdminServiceImpl extends EgovAbstractServiceImpl implements AdminSe
 
 	@Override
 	public int selectAdminEventCnt(HashMap<String, Object> paramMap) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stubs
 		return adminDAO.selectAdminEventCnt(paramMap);
 	}
 
@@ -133,6 +133,12 @@ public class AdminServiceImpl extends EgovAbstractServiceImpl implements AdminSe
 		// TODO Auto-generated method stub
 		return adminDAO.deleteEventInfo(paramMap);
 	}
+	
+	/*
+	 * @Override public int reRegisterEvent(HashMap<String, Object> paramMap) {
+	 * return adminDAO.reRegisterEventInfo(paramMap); }
+	 */
+
 
 	@Override
 	public List<HashMap<String, Object>> selectEventApplyList(HashMap<String, Object> paramMap) {

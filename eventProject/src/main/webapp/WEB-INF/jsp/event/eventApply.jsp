@@ -59,8 +59,11 @@
             <ul>
                 <li><a href="/event/eventList.do">Home</a></li>
                 <li><a href="javascript:alert('준비중입니다.');">About</a></li>
+                <!-- About <접수된 이벤트 -->
                 <li><a href="javascript:alert('준비중입니다.');">Services</a></li>
+                <!-- service 개인정보 수정 / 로그 아웃  / 개인 페이지  -->
                 <li><a href="javascript:alert('준비중입니다.');">Contact</a></li>
+                <!-- 회사에 대한 문의/ 오류 상담 문의/ 이벤트 문의 -->
             </ul>
         </nav>
     </div>

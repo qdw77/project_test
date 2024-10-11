@@ -14,7 +14,9 @@
 <script type="text/javascript">
 
 
+
 	$(document).ready(function(){
+		
 		fn_getFileList();
 		$("#btn_list").on("click", function(){
 			location.href = "/admin/eventMngList.do";
@@ -31,6 +33,10 @@
 		$("#btn_applyList").on("click", function(){
 			fn_applyList();
 		});
+		
+/* 		$("btn_reRegister").on("click", function() {
+			fn_reRegister();
+		}); */
 	});
 	
 	function fn_getFileList(){
@@ -100,6 +106,30 @@
 		}
 	}
 	
+/* 	 function fn_reRegister() {
+	        if (confirm("재등록 하시겠습니까?")) {
+	            var frm = $("#eventFrm").serialize(); // 폼 데이터 직렬화
+	            
+	            $.ajax({
+	                url: '/admin/reRegisterEvent.do',
+	                method: 'post',
+	                data: frm,
+	                dataType: 'json',
+	                success: function(data, status, xhr) {
+	                    if (data.resultChk > 0) { // 서버에서 반환된 결과 체크
+	                        alert("재등록 되었습니다.");
+	                        location.href = "/admin/eventMngList.do"; // 목록으로 리디렉션
+	                    } else {
+	                        alert("재등록에 실패하였습니다.");
+	                    }
+	                },
+	                error: function(data, status, err) {
+	                	console.log(status);
+	                    alert("서버 오류가 발생하였습니다."); // 에러 처리
+	                }
+	            });
+	        }
+	 } */
 	function fn_applyList(){
 		console.log(1);
 		var frm = $("#eventFrm");
@@ -172,9 +202,12 @@
                 <input type="text" id="updateDate" name="updateDate" value="${eventInfo.updateDate}" />
             </div>
             <div class="rightBtn">
+            <c:if test="${loginInfo.id == eventInfo.createId }">
             	<button type="button" id="btn_update" name="btn_update" style="margin-right: 2px;">수정</button>
             	<button type="button" id="btn_delete" name="btn_delete" style="margin-right: 2px;">삭제</button>
+            	<!-- <button type="button" id="btn_reRegister" name="btn_reRegister" style="margin-right: 2px;" >재등록</button> -->
             	<button type="button" id="btn_applyList" name="btn_applyList" style="margin-right: 2px;">참가자 목록보기</button>
+            </c:if>
             	<button type="button" id="btn_list" name="btn_list">목록으로</button>
             </div>
         </form>

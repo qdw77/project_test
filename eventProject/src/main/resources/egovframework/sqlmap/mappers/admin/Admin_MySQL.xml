@@ -192,6 +192,14 @@
 		
 	</update>
 	
+<!-- <update id="reRegisterEventInfo" parameterType="java.util.HashMap">
+	    UPDATE tb_event
+	    SET use_yn = 'Y',
+	        update_id = #{memberId},
+	        update_date = CURRENT_TIMESTAMP()
+	    WHERE event_seq = #{eventSeq}
+	</update> -->
+	
 	<select id="selectEventApplyList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		select  T.event_join_seq AS eventJoinSeq,
 				T.event_seq AS eventSeq,

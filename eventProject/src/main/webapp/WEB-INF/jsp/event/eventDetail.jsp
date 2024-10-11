@@ -39,8 +39,8 @@
 		    	var innerHtml = '';
 		    	for(var i=0; i<data.fileList.length; i++){
 		    		innerHtml += '<span>';
-		    		innerHtml += '<a href="javascript:fn_down(\''+data.fileList[i].saveFilePath+'\',\''+data.fileList[i].saveFileName+'\');">';
-			    	innerHtml += data.fileList[i].fileOriginalName;
+		    		innerHtml += '<a href="javascript:fn_down(\''+data.fileList[i].saveFilePath+'\',\''+data.fileList[i].saveFileName+'\', \''+data.fileList[i].originalFileName+'\');">';
+			    	innerHtml += data.fileList[i].originalFileName;
 			    	innerHtml += '</a></span><br>';	
 		    	}
 		    	$("#boardFileList").html(innerHtml);
@@ -51,9 +51,10 @@
 		});
 	}
 	
-	function fn_down(filePath, fileName){
+	function fn_down(filePath, fileName, originalFileName){
 		$("#fileName").val(fileName);
-		$("#filePath").val(filePath)
+		$("#filePath").val(filePath);
+		$("#originalFileName").val(originalFileName);
 		var frm = $("#fileFrm");
 		frm.attr("action", "/admin/getFileDown.do");
 		frm.submit();
@@ -73,8 +74,11 @@
             <ul>
                 <li><a href="/event/eventList.do">Home</a></li>
                 <li><a href="javascript:alert('준비중입니다.');">About</a></li>
+                <!-- About <접수된 이벤트 -->
                 <li><a href="javascript:alert('준비중입니다.');">Services</a></li>
+                <!-- service 개인정보 수정 / 로그 아웃  / 개인 페이지  -->
                 <li><a href="javascript:alert('준비중입니다.');">Contact</a></li>
+                <!-- 회사에 대한 문의/ 오류 상담 문의/ 이벤트 문의 -->
             </ul>
         </nav>
     </div>
@@ -87,6 +91,7 @@
         <form id="fileFrm" name="fileFrm" method="POST">
         	<input type="hidden" id="fileName" name="fileName" />
         	<input type="hidden" id="filePath" name="filePath" />
+        	<input type="hidden" id="originalFileName" name="originalFileName" />
         </form>
         <form class="event-form" method="POST" id="eventFrm" name="eventFrm">
         	<input type="hidden" id="eventSeq" name="eventSeq" value="${eventInfo.eventSeq }"/>
@@ -145,6 +150,7 @@
             		<button type="button" id="btn_apply" name="btn_apply" style="margin-right: 2px;">접수</button>
             	</c:if>
             	<button type="button" id="btn_list" name="btn_list">목록으로</button>
+            	<!-- 목록으로 돌아가기 추가 -->
             </div>
         </form>
     </div>

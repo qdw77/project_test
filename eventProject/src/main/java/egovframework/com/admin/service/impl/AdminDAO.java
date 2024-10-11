@@ -66,4 +66,9 @@ public class AdminDAO extends EgovAbstractMapper{
 	public int setEventJoinCofirm(HashMap<String, Object> paramMap) {
 		return update("setEventJoinCofirm", paramMap);
 	}
+
+	public int reRegisterEventInfo(HashMap<String, Object> paramMap) {
+		// TODO Auto-generated method stub
+		return update("reRegisterEventInfo", paramMap);	
+		}
 }

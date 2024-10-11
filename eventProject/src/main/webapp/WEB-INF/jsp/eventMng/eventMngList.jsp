@@ -11,6 +11,7 @@
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
 <title>Insert title here</title>
+<!-- admin 게시판 -->
 <script type="text/javascript">
 	$(document).ready(function(){
 		fn_selectList(1);
@@ -165,8 +166,8 @@
 	      			<th>이벤트명</th>
 	      			<th>게시기간</th>
 	      			<th>신청기간</th>
-	      			<th>등록일자</th>
 	      			<th>등록자</th>
+	      			<th>등록일자</th>
 	      			<th>조회수</th>
 	      			<th>사용여부</th>
    				</tr>
